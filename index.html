@@ -9,6 +9,96 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<link rel="icon" href="/favicon.ico">
 	<script>
+		// 定义一个默认的 i18n 函数，以防模块加载失败
+		window.i18n = window.i18n || function(key) {
+			// 默认使用中文
+			const defaultMessages = {
+				"title": "Scoop 软件搜索",
+				"subtitle": "实时搜索 Scoop 软件包，复制安装命令，轻松管理您的 Windows 软件。安装",
+				"search.placeholder": "输入要搜索的软件名称，例如：git, vscode, pnpm...",
+				"search.button": "搜索",
+				"search.commandNote": "搜索过程等同于命令：",
+				"search.emptyPrompt": "请输入搜索关键词",
+				"bucket.title": "默认 Bucket",
+				"bucket.customTitle": "添加自定义 Bucket",
+				"bucket.addPlaceholder": "输入 GitHub 仓库路径，例如：user/repo",
+				"bucket.addButton": "添加",
+				"bucket.invalidFormat": "请输入有效的 GitHub 仓库路径，格式为：user/repo",
+				"bucket.alreadyExists": "该 bucket 已添加",
+				"results.title": "搜索结果",
+				"results.count": "个",
+				"results.sortByName": "按名称",
+				"results.sortByBucket": "按源",
+				"results.noDescription": "无描述",
+				"results.copyCommand": "复制安装命令",
+				"results.homepage": "主页",
+				"results.noResults.title": "未找到匹配的软件",
+				"results.noResults.subtitle": "请尝试更改搜索关键词或添加更多的 bucket 源",
+				"results.searchFailed": "搜索失败，请稍后重试",
+				"results.copied": "命令已复制到剪贴板",
+				"results.apiLimit": "注意：GitHub API 有请求速率限制，频繁搜索可能导致暂时无法获取结果",
+				"footer.authorName": "大大的小蜗牛",
+				"footer.slogan": "Scoop 软件搜索工具"
+			};
+			return defaultMessages[key] || key;
+		};
+		
+		// 尝试加载 i18n 模块
+		document.addEventListener('DOMContentLoaded', function() {
+			const script = document.createElement('script');
+			script.type = 'module';
+			script.textContent = `
+				import i18n, { getLanguage, setLanguage } from './i18n/index.js';
+				window.i18n = i18n;
+				window.setLanguage = setLanguage;
+				window.applyI18n = () => {
+					// 更新所有带有 data-i18n 属性的元素
+					document.querySelectorAll('[data-i18n]').forEach(element => {
+						const key = element.getAttribute('data-i18n');
+						if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+							element.placeholder = i18n ? i18n(key) : '';
+						} else {
+							element.textContent = i18n ? i18n(key) : '';
+						}
+					});
+				};
+				
+				// 获取当前语言设置
+				const savedLang = localStorage.getItem('language');
+				window.currentLanguage = savedLang || 'zh-CN';
+				
+				// 应用初始语言
+				if (window.applyI18n) {
+					window.applyI18n();
+				}
+				
+				// 更新语言选择器的值
+				const languageSelect = document.getElementById('language-select');
+				if (languageSelect) {
+					languageSelect.value = window.currentLanguage;
+				}
+			`;
+			script.onerror = function() {
+				console.warn('Failed to load i18n module, using fallback');
+				// 使用页面上已有的文本作为默认值
+				document.querySelectorAll('[data-i18n]').forEach(element => {
+					const key = element.getAttribute('data-i18n');
+					if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+						// 保留已设置的 placeholder
+					} else {
+						// 保留元素内的文本内容
+					}
+				});
+				
+				// 设置语言选择器的默认值为中文
+				const languageSelect = document.getElementById('language-select');
+				if (languageSelect) {
+					languageSelect.value = 'zh-CN';
+				}
+			};
+			document.head.appendChild(script);
+		});
+
 		tailwind.config = {
 			darkMode: 'class',
 			theme: {
@@ -61,23 +151,6 @@
 			transition: all 0.3s ease;
 		}
 	</style>
-	<script type="module">
-		import i18n, { getLanguage, setLanguage } from './i18n/index.js';
-		window.i18n = i18n;
-		window.setLanguage = setLanguage;
-		window.applyI18n = () => {
-			// 更新所有带有 data-i18n 属性的元素
-			document.querySelectorAll('[data-i18n]').forEach(element => {
-				const key = element.getAttribute('data-i18n');
-				if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
-					element.placeholder = i18n(key);
-				} else {
-					element.textContent = i18n(key);
-				}
-			});
-		};
-		window.currentLanguage = getLanguage();
-	</script>
 </head>
 
 <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
@@ -114,8 +187,8 @@
 			<div class="animate-fade-in">
 				<!-- 头部信息 -->
 				<div class="text-center mb-12">
-					<h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4" data-i18n="title"></h1>
-					<p class="text-lg text-gray-600 dark:text-gray-300 max-w-5xl mx-auto"><span data-i18n="subtitle"></span> <a href="https://scoop.sh/" target="_blank">Scoop <i class="fa-solid fa-up-right-from-square"></i></a></p>
+					<h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4" data-i18n="title">Scoop 软件搜索</h1>
+					<p class="text-lg text-gray-600 dark:text-gray-300 max-w-5xl mx-auto"><span data-i18n="subtitle">实时搜索 Scoop 软件包，复制安装命令，轻松管理您的 Windows 软件。安装</span> <a href="https://scoop.sh/" target="_blank">Scoop <i class="fa-solid fa-up-right-from-square"></i></a></p>
 				</div>
 
 				<!-- 搜索框 -->
@@ -128,20 +201,20 @@
 								</div>
 								<input type="text" id="search-input"
 									class="block w-full p-4 pl-10 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-primary-400 dark:focus:border-primary-400 transition-all"
-									data-i18n="search.placeholder" placeholder="">
+									data-i18n="search.placeholder" placeholder="输入要搜索的软件名称，例如：git, vscode, pnpm...">
 							</div>
 						</div>
 						<button id="search-button"
 							class="px-6 py-4 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-300 text-white font-medium rounded-lg transition-all dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-primary-400 flex items-center justify-center"
 							data-i18n="search.button">
 							<i class="fas fa-search mr-2"></i>
-							Search
+							搜索
 						</button>
 					</div>
 					<div class="text-sm text-gray-500 dark:text-gray-400">
-						<p><span data-i18n="search.commandNote"></span><code
+						<p><span data-i18n="search.commandNote">搜索过程等同于命令：</span><code
 							class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded font-mono">scoop search &lt;app&gt;</code></p>
-						<p class="mt-4"><span data-i18n="results.apiLimit"></span></p>
+						<p class="mt-4"><span data-i18n="results.apiLimit">注意：GitHub API 有请求速率限制，频繁搜索可能导致暂时无法获取结果</span></p>
 					</div>
 				</div>
 
@@ -149,7 +222,7 @@
 				<div class="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow p-6 animate-fade-in">
 					<h2 class="text-xl font-bold mb-4 flex items-center">
 						<i class="fas fa-bucket mr-2 text-primary-500"></i>
-						<span data-i18n="bucket.title"></span>
+						<span data-i18n="bucket.title">默认 Bucket</span>
 					</h2>
 					<div class="space-y-4">
 						<div class="space-y-2" id="default-buckets">
@@ -172,11 +245,6 @@
 								<span
 									class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300">
 									<i class="fas fa-check-circle mr-1"></i>
-									<a href="https://github.com/matthewjberger/scoop-nerd-fonts" target="_blank">matthewjberger/scoop-nerd-fonts</a>
-								</span>
-								<span
-									class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300">
-									<i class="fas fa-check-circle mr-1"></i>
 									<a href="https://github.com/ScoopInstaller/Nonportable" target="_blank">ScoopInstaller/Nonportable</a>
 								</span>
 								<span
@@ -184,13 +252,23 @@
 									<i class="fas fa-check-circle mr-1"></i>
 									<a href="https://github.com/chawyehsu/dorado" target="_blank">chawyehsu/dorado</a>
 								</span>
+								<span
+									class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300">
+									<i class="fas fa-square-xmark mr-1 text-red-600"></i>
+									<a href="https://github.com/eallion/funle" target="_blank">eallion/funle</a>
+								</span>
+								<span
+									class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-300">
+									<i class="fas fa-check-circle mr-1"></i>
+									<a href="https://github.com/matthewjberger/scoop-nerd-fonts" target="_blank">matthewjberger/scoop-nerd-fonts</a>
+								</span>
 							</div>
 						</div>
 
 						<!-- 自定义 Bucket -->
 						<div class="pt-4 border-t border-gray-200 dark:border-gray-700">
 							<button id="toggle-custom-bucket" class="w-full flex items-center justify-between text-lg font-medium mb-3 hover:text-primary-600 dark:hover:text-primary-400">
-								<span><i class="fa-solid fa-circle-plus"></i> <span data-i18n="bucket.customTitle"></span></span>
+								<span><i class="fa-solid fa-circle-plus"></i> <span data-i18n="bucket.customTitle">添加自定义 Bucket</span></span>
 								<i class="fas fa-chevron-down transition-transform"></i>
 							</button>
 							<div id="custom-bucket-form" class="hidden">
@@ -198,7 +276,7 @@
 									<div class="flex-grow">
 										<input type="text" id="custom-bucket"
 											class="block w-full p-3 text-gray-900 border border-gray-200 rounded-lg bg-white focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-primary-400 dark:focus:border-primary-400 transition-all"
-											placeholder="" data-i18n="bucket.addPlaceholder">
+											placeholder="" data-i18n="bucket.addPlaceholder" placeholder="输入 GitHub 仓库路径，例如：user/repo">
 									</div>
 									<button id="add-bucket"
 										class="px-4 py-3 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-100 text-gray-800 font-medium rounded-lg transition-all dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:focus:ring-gray-600 flex items-center justify-center"
@@ -219,8 +297,8 @@
 				<div id="results-container" class="space-y-4 animate-fade-in hidden">
 					<div class="flex items-center justify-between mb-4">
 						<h2 class="text-xl font-bold">
-							<span data-i18n="results.title"></span> <span id="results-count" class="text-gray-500 dark:text-gray-400 text-sm font-normal ml-2">(0
-								<span data-i18n="results.count"></span>)</span>
+							<span data-i18n="results.title">搜索结果</span> <span id="results-count" class="text-gray-500 dark:text-gray-400 text-sm font-normal ml-2">(0
+								<span data-i18n="results.count">个</span>)</span>
 						</h2>
 						<div class="flex gap-2">
 							<button id="sort-name"
@@ -252,8 +330,8 @@
 							class="inline-flex justify-center items-center w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 mb-6">
 							<i class="fas fa-search text-4xl text-gray-400"></i>
 						</div>
-						<h3 class="text-xl font-semibold mb-2" data-i18n="results.noResults.title"></h3>
-						<p class="text-gray-500 dark:text-gray-400" data-i18n="results.noResults.subtitle"></p>
+						<h3 class="text-xl font-semibold mb-2" data-i18n="results.noResults.title">未找到匹配的软件</h3>
+						<p class="text-gray-500 dark:text-gray-400" data-i18n="results.noResults.subtitle">请尝试更改搜索关键词或添加更多的 bucket 源</p>
 					</div>
 				</div>
 			</div>
@@ -268,8 +346,8 @@
 					<div class="flex items-center">
 						<img src="https://avatars.githubusercontent.com/u/1698841?v=4" alt="头像" class="w-12 h-12 rounded-full">
 						<div class="ml-3">
-							<h3 class="text-lg font-bold"><span data-i18n="footer.authorName"></span></h3>
-							<p class="text-sm text-gray-500 dark:text-gray-400"><span data-i18n="footer.slogan"></span></p>
+							<h3 class="text-lg font-bold"><span data-i18n="footer.authorName">大大的小蜗牛</span></h3>
+							<p class="text-sm text-gray-500 dark:text-gray-400"><span data-i18n="footer.slogan">Scoop 软件搜索工具</span></p>
 						</div>
 					</div>
 				</div>
@@ -292,8 +370,8 @@
 
 	<!-- 复制提示 -->
 	<div id="copy-toast"
-		class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 translate-y-16 opacity-0 z-50" data-i18n="results.copied">
-		命令已复制到剪贴板
+		class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 translate-y-16 opacity-0 z-50">
+		<span data-i18n="results.copied">命令已复制到剪贴板</span>
 	</div>
 
 	<script>
@@ -348,18 +426,23 @@
 				icon.style.transform = form.classList.contains('hidden') ? '' : 'rotate(180deg)';
 			});
 
-			// 应用初始语言
-			window.applyI18n();
-
 			// 设置当前语言
 			const languageSelect = document.getElementById('language-select');
-			languageSelect.value = currentLanguage;
+			// 默认使用中文
+			languageSelect.value = 'zh-CN';
 
 			// 语言切换事件
 			languageSelect.addEventListener('change', function (e) {
 				const newLang = e.target.value;
 				localStorage.setItem('language', newLang);
-				window.location.reload();
+				
+				// 如果模块已加载，使用模块的 setLanguage 函数
+				if (window.setLanguage) {
+					window.setLanguage(newLang);
+				} else {
+					// 否则重新加载页面
+					window.location.reload();
+				}
 			});
 		});
 
@@ -368,9 +451,10 @@
 			'ScoopInstaller/Main',
 			'ScoopInstaller/Extras',
 			'ScoopInstaller/Versions',
-			'matthewjberger/scoop-nerd-fonts',
 			'ScoopInstaller/Nonportable',
-			'chawyehsu/dorado'
+			'chawyehsu/dorado',
+			// 'eallion/funle',
+			'matthewjberger/scoop-nerd-fonts'
 		];
 
 		// 自定义 bucket 列表
@@ -385,13 +469,13 @@
 
 			// 验证格式是否为 user/repo
 			if (!/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+$/.test(bucketValue)) {
-				alert(i18n('bucket.invalidFormat'));
+				alert(i18n ? i18n('bucket.invalidFormat') : 'Invalid format. Please use format: user/repo');
 				return;
 			}
 
 			// 检查是否已存在
 			if (defaultBuckets.includes(bucketValue) || customBuckets.includes(bucketValue)) {
-				alert(i18n('bucket.alreadyExists'));
+				alert(i18n ? i18n('bucket.alreadyExists') : 'Bucket already exists');
 				return;
 			}
 
@@ -491,9 +575,10 @@
 				return {
 					name: manifestPath.split('/').pop().replace('.json', ''),
 					version: data.version || 'unknown',
-					description: data.description || i18n('results.noDescription'),
+					description: data.description || (i18n ? i18n('results.noDescription') : 'No description available'),
 					homepage: data.homepage || '',
-					bucket: bucket.split('/')[1].toLowerCase()
+					bucket: bucket.split('/')[1].toLowerCase(),
+					bucketFullName: bucket // 添加完整的 bucket 名称
 				};
 			} catch (error) {
 				console.error(`获取包信息失败:`, error);
@@ -506,7 +591,7 @@
 			const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
 
 			if (!searchTerm) {
-				alert(i18n('search.emptyPrompt'));
+				alert(i18n ? i18n('search.emptyPrompt') : 'Please enter a search term');
 				return;
 			}
 
@@ -548,30 +633,42 @@
 					displayResults(results);
 				} else {
 					document.getElementById('no-results').classList.remove('hidden');
-					document.getElementById('results-count').textContent = '(0 ' + i18n('results.count') + ')';
+					document.getElementById('results-count').textContent = `(0 ${i18n ? i18n('results.count') : 'results'})`;
 				}
 
 			} catch (error) {
 				console.error('搜索失败：', error);
 				document.getElementById('loading-indicator').classList.add('hidden');
-				alert(i18n('results.searchFailed'));
+				alert(i18n ? i18n('results.searchFailed') : 'Search failed');
 			}
 		}
-
-		// 添加速率限制处理
-		const rateLimitWarning = document.createElement('div');
-		rateLimitWarning.className = 'text-sm text-yellow-600 dark:text-yellow-400 mt-2';
-		rateLimitWarning.textContent = i18n('results.apiLimit');
-		document.querySelector('.mb-8').appendChild(rateLimitWarning);
 
 		// 显示搜索结果
 		function displayResults(results) {
 			const resultsList = document.getElementById('results-list');
 			resultsList.innerHTML = '';
 
-			document.getElementById('results-count').textContent = `(${results.length} ${i18n('results.count')})`;
+			document.getElementById('results-count').textContent = `(${results.length} ${i18n ? i18n('results.count') : 'results'})`;
 
 			results.forEach(item => {
+				// 检查是否为官方仓库（需要显示 bucket 名称）或者第三方仓库
+				const isOfficialBucket = [
+					'ScoopInstaller/Main',
+					'ScoopInstaller/Extras',
+					'ScoopInstaller/Versions',
+					'ScoopInstaller/Nonportable'
+				].includes(`${item.bucketFullName}`);
+				
+				// 构建安装命令
+				const installCommand = isOfficialBucket 
+					? `scoop install ${item.name}` 
+					: `scoop install ${item.bucketFullName.split('/')[1]}/${item.name}`;
+
+				// 安全检查 i18n 是否定义
+				const noDescriptionText = i18n ? i18n('results.noDescription') : 'No description available';
+				const copyCommandText = i18n ? i18n('results.copyCommand') : 'Copy Command';
+				const homepageText = i18n ? i18n('results.homepage') : 'Homepage';
+
 				const resultCard = document.createElement('div');
 				resultCard.className = 'bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all overflow-hidden';
 				resultCard.innerHTML = `
@@ -588,22 +685,22 @@
                             </span>
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                            ${item.description || i18n('results.noDescription')}
+                            ${item.description || noDescriptionText}
                         </p>
                         <div class="flex flex-wrap justify-between items-center">
                             <div class="flex space-x-2">
-                                <button class="copy-command px-3 py-1.5 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded-md flex items-center" data-command="scoop install ${item.name}">
+                                <button class="copy-command px-3 py-1.5 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded-md flex items-center" data-command="${installCommand}">
                                     <i class="fas fa-copy mr-1"></i>
-                                    ${i18n('results.copyCommand')}
+                                    ${copyCommandText}
                                 </button>
                                 ${item.homepage ? `
                                 <a href="${item.homepage}" target="_blank" class="px-3 py-1.5 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md flex items-center">
                                     <i class="fas fa-external-link-alt mr-1"></i>
-                                    ${i18n('results.homepage')}
+                                    ${homepageText}
                                 </a>` : ''}
                             </div>
                             <div class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-2 sm:mt-0">
-                                scoop install ${item.name}
+                                ${installCommand}
                             </div>
                         </div>
                     </div>
@@ -625,7 +722,7 @@
 		// 显示复制成功提示
 		function showCopyToast() {
 			const toast = document.getElementById('copy-toast');
-			toast.textContent = i18n('results.copied');
+			toast.textContent = i18n ? i18n('results.copied') : 'Command copied to clipboard';
 			toast.classList.remove('translate-y-16', 'opacity-0');
 			toast.classList.add('translate-y-0', 'opacity-100');
 
