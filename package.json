@@ -1,0 +1,31 @@
+{
+  "name": "scoop-search-online",
+  "version": "1.0.0",
+  "description": "- https://scoop.eallion.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/index.test.js",
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./dist/output.css",
+    "build": "npm run build:css",
+    "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "clean": "rm -rf dist/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eallion/scoop-search-online.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eallion/scoop-search-online/issues"
+  },
+  "homepage": "https://github.com/eallion/scoop-search-online#readme",
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify/tailwind": "^1.2.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}
