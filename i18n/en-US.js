@@ -8,12 +8,9 @@ export default {
     emptyPrompt: 'Please enter search keywords'
   },
   bucket: {
-    title: 'Default Buckets',
-    customTitle: 'Add Custom Bucket',
-    addPlaceholder: 'Enter GitHub repository path, e.g.: user/repo',
-    addButton: 'Add',
-    invalidFormat: 'Please enter a valid GitHub repository path in format: user/repo',
-    alreadyExists: 'This bucket already exists'
+    title: 'Official Buckets',
+    officialTitle: 'Official Buckets',
+    thirdPartyTitle: 'Third-Party Buckets'
   },
   results: {
     title: 'Search Results',
@@ -29,7 +26,8 @@ export default {
     },
     searchFailed: 'Search failed, please try again later',
     copied: 'Command copied to clipboard',
-    apiLimit: 'Note: GitHub API has rate limits, frequent searches may temporarily fail to get results'
+    apiLimit: 'Note: <span class="text-amber-600 dark:text-amber-400 font-medium">GitHub API has rate limits</span>, frequent searches may temporarily fail to get results',
+    moreBuckets: 'For more repositories, see: <a href="https://rasa.github.io/scoop-directory/by-stars.html" target="_blank">https://rasa.github.io/scoop-directory/by-stars.html</a>'
   },
   footer: {
     authorName: 'Charles Chin',

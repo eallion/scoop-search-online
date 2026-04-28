@@ -8,12 +8,9 @@ export default {
     emptyPrompt: '请输入搜索关键词'
   },
   bucket: {
-    title: '默认 Bucket',
-    customTitle: '添加自定义 Bucket',
-    addPlaceholder: '输入 GitHub 仓库路径，例如：user/repo',
-    addButton: '添加',
-    invalidFormat: '请输入有效的 GitHub 仓库路径，格式为：user/repo',
-    alreadyExists: '该 bucket 已添加'
+    title: '官方 Buckets',
+    officialTitle: '官方 Buckets',
+    thirdPartyTitle: '第三方 Buckets'
   },
   results: {
     title: '搜索结果',
@@ -29,7 +26,8 @@ export default {
     },
     searchFailed: '搜索失败，请稍后重试',
     copied: '命令已复制到剪贴板',
-    apiLimit: '注意：GitHub API 有请求速率限制，频繁搜索可能导致暂时无法获取结果'
+    apiLimit: '注意：<span class="text-amber-600 dark:text-amber-400 font-medium">GitHub API 有请求速率限制</span>，频繁搜索可能导致暂时无法获取结果',
+    moreBuckets: '更多仓库请参考：<a href="https://rasa.github.io/scoop-directory/by-stars.html" target="_blank">https://rasa.github.io/scoop-directory/by-stars.html</a>'
   },
   footer: {
     authorName: '大大的小蜗牛',

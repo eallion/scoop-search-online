@@ -6,13 +6,30 @@
 
 ## scoop bucket known list
 
+### Official Buckets
+
 - https://github.com/ScoopInstaller/Main
 - https://github.com/ScoopInstaller/Extras
 - https://github.com/ScoopInstaller/Versions
-- https://github.com/matthewjberger/scoop-nerd-fonts
 - https://github.com/ScoopInstaller/Nonportable
+- https://github.com/matthewjberger/scoop-nerd-fonts
+- https://github.com/ScoopInstaller/Nirsoft
+- https://github.com/niheaven/scoop-sysinternals
+- https://github.com/ScoopInstaller/PHP
+- https://github.com/ScoopInstaller/Java
+- https://github.com/Calinou/scoop-games
+
+### Third-Party Buckets
+
 - https://github.com/chawyehsu/dorado
 - https://github.com/hoilc/scoop-lemon
+- https://github.com/cmontage/scoopbucket-third
+- https://github.com/lvyuemeng/scoop-cn
+- https://github.com/eallion/funle [wip]
+- https://github.com/tldrw/scoop-security
+- https://github.com/Scoopforge/Extras-CN
+- https://github.com/Scoopforge/Extras-Plus
+- https://github.com/TheRandomLabs/Scoop-Spotify
 
 ## Internationalization (i18n)
 
