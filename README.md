@@ -51,7 +51,7 @@ This project now uses a modern build system with pnpm and Tailwind CSS.
 
 ### Prerequisites
 
-- Node.js 24 or higher
+- Node.js 22 or higher
 - pnpm 10 or higher
 
 ### Setup

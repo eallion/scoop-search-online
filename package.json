@@ -5,7 +5,7 @@
   "main": "index.js",
   "packageManager": "pnpm@10.33.2",
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "scripts": {
     "test": "node test/index.test.js",
