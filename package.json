@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "- https://scoop.eallion.com",
   "main": "index.js",
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "test": "node test/index.test.js",
-    "build:css": "npx tailwindcss -i ./src/input.css -o ./dist/output.css",
-    "build": "npm run build:css",
-    "dev": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "build:css": "pnpm exec tailwindcss -i ./src/input.css -o ./dist/output.css",
+    "build": "pnpm run build:css",
+    "dev": "pnpm exec tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
     "clean": "rm -rf dist/*"
   },
   "repository": {

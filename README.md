@@ -12,6 +12,7 @@
 - https://github.com/matthewjberger/scoop-nerd-fonts
 - https://github.com/ScoopInstaller/Nonportable
 - https://github.com/chawyehsu/dorado
+- https://github.com/hoilc/scoop-lemon
 
 ## Internationalization (i18n)
 
@@ -29,31 +30,31 @@ To add a new language:
 
 ## Development
 
-This project now uses a modern build system with npm and Tailwind CSS.
+This project now uses a modern build system with pnpm and Tailwind CSS.
 
 ### Prerequisites
 
-- Node.js (version 12 or higher)
-- npm (usually comes with Node.js)
+- Node.js 24 or higher
+- pnpm 10 or higher
 
 ### Setup
 
 1. Install dependencies:
 
    ```
-   npm install
+   pnpm install
    ```
 
 2. Build the project:
 
    ```
-   npm run build
+   pnpm run build
    ```
 
 3. For development with automatic rebuilding:
 
    ```
-   npm run dev
+   pnpm run dev
    ```
 
 ### Project Structure
