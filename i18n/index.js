@@ -7,37 +7,35 @@ export const messages = {
 };
 
 export function getLanguage() {
-  // 优先使用用户设置的语言
   const savedLang = localStorage.getItem('language');
   if (savedLang && messages[savedLang]) {
     return savedLang;
   }
 
-  // 其次使用浏览器语言
   const browserLang = navigator.language;
   if (messages[browserLang]) {
     return browserLang;
   }
 
-  // 如果是中文环境，返回中文
-  if (browserLang.startsWith('zh')) {
+  if (browserLang && browserLang.startsWith('zh')) {
     return 'zh-CN';
   }
 
-  // 默认使用英文
   return 'en-US';
 }
 
 export function setLanguage(lang) {
   if (messages[lang]) {
     localStorage.setItem('language', lang);
-    window.location.reload();
+    if (window.applyI18n) {
+      window.applyI18n();
+    }
   }
 }
 
 export default function i18n(key) {
   const lang = getLanguage();
-  const message = messages[lang];
-  
-  return key.split('.').reduce((obj, k) => obj && obj[k], message) || key;
+  const message = messages[lang] || messages['zh-CN'];
+
+  return key.split('.').reduce((obj, k) => (obj && obj[k] !== undefined ? obj[k] : undefined), message) || key;
 }

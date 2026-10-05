@@ -51,7 +51,7 @@ This project now uses a modern build system with pnpm and Tailwind CSS.
 
 ### Prerequisites
 
-- Node.js 22 or higher
+- Node.js 24 or higher
 - pnpm 10 or higher
 
 ### Setup
@@ -76,8 +76,7 @@ This project now uses a modern build system with pnpm and Tailwind CSS.
 
 ### Project Structure
 
-- `src/input.css`: Main CSS file with Tailwind directives
+- `src/input.css`: Main CSS file with Tailwind v4 configuration, theme, and Iconify plugin
 - `dist/output.css`: Generated Tailwind CSS file
-- `tailwind.config.js`: Tailwind CSS configuration
-- `postcss.config.js`: PostCSS configuration
+- `postcss.config.js`: PostCSS configuration (@tailwindcss/postcss)
 - `package.json`: Project dependencies and scripts
